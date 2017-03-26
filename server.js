@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/myDB');
 
 var Bear = require('./app/models/bear');
+var Course = require('./app/models/course');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -78,7 +79,26 @@ router.route('/bears/:bear_id')
         });
     });
 
+router.route('/courses')
+  .post(function(req,res){
+      var object = new Course ({
+            name: 'math',
+            credit: 2,
+            professorName: 'Chau'
+          });
+       object.save(function (err) {
+           if (err)
+                console.log ('Error on save!')});
+    })
+    
+    .get(function(req, res) {
+        Course.find(function(err, courses) {
+            if (err)
+                res.send(err);
 
+                res.json(courses);
+        });
+    });
 
 app.use('/api',router);
 app.listen(port);
